@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.MySplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/green</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ggsmall</item>
+        <item name="postSplashScreenTheme">@style/Theme.GreenGuardian</item>
+
+    </style>
+    
+    <style name="Theme.GreenGuardian" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>
