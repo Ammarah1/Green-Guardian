@@ -1,6 +1,7 @@
 package com.example.greenguardian
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -57,7 +58,7 @@ fun ListScreen(navController: NavController) {
             val chunkedItems = items.chunked(2)
             chunkedItems.forEach { chunk ->
                 item {
-                    TwoItemsRow(items = chunk)
+                    TwoItemsRow(items = chunk, navController = navController)
                 }
             }
         }
@@ -67,24 +68,25 @@ fun ListScreen(navController: NavController) {
 }
 
 @Composable
-fun TwoItemsRow(items: List<ListItem>) {
+fun TwoItemsRow(items: List<ListItem>, navController: NavController) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.Top
     ) {
         items.forEach { item ->
-            ListItem(item = item)
+            ListItem(item = item, navController = navController) // Pass navController to ListItem
         }
     }
 }
 
 @Composable
-fun ListItem(item: ListItem) {
+fun ListItem(item: ListItem, navController: NavController) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top, // Align items at the top
         modifier = Modifier
+            .clickable { navController.navigate("Detail/${item.name}") } // Navigate to detail screen when clicked
             .padding(8.dp)
             .fillMaxHeight()
     ) {
@@ -97,6 +99,8 @@ fun ListItem(item: ListItem) {
         Text(text = item.name, fontSize = 24.sp)
     }
 }
+
+
 
 
 
