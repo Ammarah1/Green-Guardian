@@ -2,9 +2,11 @@ package com.example.greenguardian
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -72,13 +74,38 @@ fun Content(navController: NavController) {
 fun SideBarMainScreen(navController: NavController, content: @Composable () -> Unit) {
     val selectedItem = remember { mutableStateOf("Home") }
 
-    // Use a Column to place the SideNavigationBar and the content vertically
-    Column {
-        SideNavigationBar(
-            onItemClick = { selectedItem.value = it },
-            selectedItem = selectedItem.value,
-            content = content
-        )
+    val currentRoute = navController.currentDestination?.route
+    val shouldDisplayNavigationBar = currentRoute != "Splash" // Change "Splash" to the route of your animation screen
+
+    if (shouldDisplayNavigationBar) {
+        // Row containing both the side navigation bar and the content
+        Row(modifier = Modifier.fillMaxSize()) {
+            // Side navigation bar
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(200.dp)
+                    .background(Color.LightGray)
+                    .padding(16.dp) // Applying padding to the side navigation bar
+            ) {
+                DrawerItem("Home", onItemClick = { selectedItem.value = "Home" }, selectedItem = selectedItem.value)
+                DrawerItem("Profile", onItemClick = { selectedItem.value = "Profile" }, selectedItem = selectedItem.value)
+                DrawerItem("Settings", onItemClick = { selectedItem.value = "Settings" }, selectedItem = selectedItem.value)
+                // Add more navigation items as needed
+            }
+
+            // Content alongside the side navigation bar
+            Box(modifier = Modifier.weight(1f).padding(16.dp)) {
+                content() // Invoke the content lambda
+            }
+        }
+    } else {
+        // Only display the content without the navigation bar
+        content()
     }
 }
+
+
+
+
 
