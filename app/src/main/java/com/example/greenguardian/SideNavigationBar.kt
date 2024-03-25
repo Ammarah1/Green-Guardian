@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -71,26 +72,27 @@ fun Content(navController: NavController) {
 }
 
 @Composable
-fun SideBarMainScreen(navController: NavController, content: @Composable () -> Unit) {
-    val selectedItem = remember { mutableStateOf("Home") }
+fun SideBarMainScreen(
+    navController: NavController,
+    toggleNavigationBar: () -> Unit,
+    shouldDisplayNavigationBar: Boolean,
+    content: @Composable () -> Unit
+) {
+    val navBarVisible = remember { mutableStateOf(false) }
 
-    val currentRoute = navController.currentDestination?.route
-    val shouldDisplayNavigationBar = currentRoute != "Splash" // Change "Splash" to the route of your animation screen
-
-    if (shouldDisplayNavigationBar) {
-        // Row containing both the side navigation bar and the content
-        Row(modifier = Modifier.fillMaxSize()) {
+    if (navBarVisible.value) {
+        // Display the side navigation bar with content
+        Row(Modifier.fillMaxSize()) {
             // Side navigation bar
             Column(
                 modifier = Modifier
-                    .fillMaxHeight()
                     .width(200.dp)
                     .background(Color.LightGray)
-                    .padding(16.dp) // Applying padding to the side navigation bar
+                    .padding(16.dp)
             ) {
-                DrawerItem("Home", onItemClick = { selectedItem.value = "Home" }, selectedItem = selectedItem.value)
-                DrawerItem("Profile", onItemClick = { selectedItem.value = "Profile" }, selectedItem = selectedItem.value)
-                DrawerItem("Settings", onItemClick = { selectedItem.value = "Settings" }, selectedItem = selectedItem.value)
+                DrawerItem("Home", onItemClick = {}, selectedItem = "") // Placeholder values
+                DrawerItem("Profile", onItemClick = {}, selectedItem = "") // Placeholder values
+                DrawerItem("Settings", onItemClick = {}, selectedItem = "") // Placeholder values
                 // Add more navigation items as needed
             }
 
@@ -99,12 +101,16 @@ fun SideBarMainScreen(navController: NavController, content: @Composable () -> U
                 content() // Invoke the content lambda
             }
         }
-    } else {
-        // Only display the content without the navigation bar
-        content()
+    }
+
+    // Button to toggle the navigation bar visibility
+    Button(
+        onClick = { navBarVisible.value = !navBarVisible.value },
+        modifier = Modifier.padding(16.dp)
+    ) {
+        Text(if (navBarVisible.value) "Hide Navigation Bar" else "Show Navigation Bar")
     }
 }
-
 
 
 

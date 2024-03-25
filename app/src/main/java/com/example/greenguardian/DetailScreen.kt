@@ -4,23 +4,27 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.compose.ui.Modifier
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.height
 
 @Composable
-fun DetailScreen(itemId: String?) {
+fun DetailScreen(
+    itemId: String?,
+    navController: NavController,
+    toggleNavigationBar: () -> Unit,
+    shouldDisplayNavigationBar: Boolean
+) {
     // Instead of finding the item by ID, you can directly use the provided itemId
     val selectedItem = remember { getSelectedItem(itemId) }
 
@@ -35,7 +39,8 @@ fun DetailScreen(itemId: String?) {
             Image(
                 painter = painterResource(id = item.imageResId),
                 contentDescription = item.name,
-                modifier = Modifier.size(200.dp)
+                modifier = Modifier.size(200.dp),
+                contentScale = ContentScale.Fit
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
@@ -44,7 +49,18 @@ fun DetailScreen(itemId: String?) {
             )
         }
     }
+
+    // Display the navigation bar
+    SideBarMainScreen(
+        navController = navController,
+        toggleNavigationBar = toggleNavigationBar,
+        shouldDisplayNavigationBar = shouldDisplayNavigationBar
+    ) {
+        // No additional content needed for DetailScreen
+    }
 }
+
+
 
 // Helper function to get the selected item by its ID
 private fun getSelectedItem(itemId: String?): ListItem? {
